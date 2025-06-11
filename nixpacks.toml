@@ -10,7 +10,7 @@ cmds = [
     "chown -R www-data:www-data /var/log /app/storage /app/bootstrap/cache",
 
     # Copy and setup config files
-    "cp /assets/{worker-*.conf,supervisord.conf} /etc/supervisor/conf.d/ && chmod +x /assets/start.sh"
+    "cp /assets/{worker-*.conf,supervisord.conf} /etc/supervisor/conf.d/ && chmod +x /assets/start.sh",
 ]
 
 [phases.postbuild]
