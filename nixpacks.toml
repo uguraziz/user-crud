@@ -5,10 +5,10 @@ nixPkgs = ["...", "python311Packages.supervisor", "php82Extensions.redis"]
 cmds = [
     # Create required directories in one command
     "mkdir -p /var/log /app/storage/framework/{views,cache,sessions} /app/bootstrap/cache /etc/supervisor/conf.d",
-    
+
     # Set permissions in a single command
     "chown -R www-data:www-data /var/log /app/storage /app/bootstrap/cache",
-    
+
     # Copy and setup config files
     "cp /assets/{worker-*.conf,supervisord.conf} /etc/supervisor/conf.d/ && chmod +x /assets/start.sh"
 ]
@@ -16,7 +16,6 @@ cmds = [
 [phases.postbuild]
 cmds = [
     "php artisan migrate --force",
-    "npm run build",
     "php artisan view:clear",
     "php artisan cache:clear",
 ]
@@ -141,7 +140,7 @@ http {
         listen ${PORT};
         listen [::]:${PORT};
         server_name domain.com _;
-        
+
         root /app/public;
 
         index index.php;
