@@ -13,11 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // $totalUsers = 10000000; // 10 million
+        $totalUsers = 1000;
+        $chunkSize = 100;
+        $chunks = $totalUsers / $chunkSize;
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $this->command->info("Starting to create {$totalUsers} users in {$chunks} chunks of {$chunkSize}...");
+
+        collect(range(1, $chunks))->each(function ($chunk) use ($chunkSize) {
+            User::factory($chunkSize)->create();
+        });
+
+        $this->command->info("Database seeding completed! Created {$totalUsers} users plus 1 test user.");
     }
 }
