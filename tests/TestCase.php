@@ -19,6 +19,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Role::create(['name' => RoleEnum::EDITOR->value]);
+        Role::create(['name' => RoleEnum::ADMIN->value]);
 
         Http::preventStrayRequests();
     }
