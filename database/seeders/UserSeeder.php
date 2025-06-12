@@ -5,24 +5,26 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $totalUsers = 10000000; // 10 million
+        $totalUsers = 10_000_000;
         $chunkSize = 1000;
-        $chunks = $totalUsers / $chunkSize;
+        $chunks = (int) ($totalUsers / $chunkSize);
 
-        $this->command->info("Starting to create {$totalUsers} users in {$chunks} chunks of {$chunkSize}...");
+        $this->command->info("Başladı: {$totalUsers} kullanıcı, {$chunks} parça halinde oluşturulacak.");
 
-        collect(range(1, $chunks))->each(function ($chunk) use ($chunkSize) {
+        // Performans için foreign key kontrollerini geçici olarak kapat
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        for ($i = 0; $i < $chunks; $i++) {
             User::factory($chunkSize)->create();
-        });
+        }
 
-        $this->command->info("Database seeding completed! Created {$totalUsers} users.");
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $this->command->info("🎉 Toplam {$totalUsers} kullanıcı başarıyla oluşturuldu!");
     }
 }
