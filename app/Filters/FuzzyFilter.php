@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Spatie\QueryBuilder\Filters\Filter;
 
@@ -18,7 +19,11 @@ class FuzzyFilter implements Filter
 
         return $query->where(function ($q) use ($columns, $value) {
             foreach ($columns as $column) {
-                $q->orWhere($column, 'ILIKE', "%{$value}%");
+                if (DB::connection()->getDriverName() === 'pgsql') {
+                    $q->orWhere($column, 'ILIKE', "%{$value}%");
+                } else {
+                    $q->orWhere($column, 'LIKE', "%{$value}%");
+                }
             }
         });
     }
