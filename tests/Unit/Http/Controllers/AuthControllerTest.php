@@ -2,13 +2,17 @@
 
 namespace Tests\Unit\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
     public function testRegister()
     {
+        Role::create(['name' => RoleEnum::EDITOR->value]);
+
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -139,11 +143,26 @@ class AuthControllerTest extends TestCase
         $response = $this->getJson('/api/user');
 
         $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'first_name',
+                'last_name',
+                'full_name',
+                'email',
+                'roles',
+                'permissions'
+            ]
+        ]);
+
         $response->assertJson([
-            'id' => $user->id,
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'email' => 'john@example.com'
+            'data' => [
+                'id' => $user->id,
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'john@example.com'
+            ]
         ]);
     }
 
