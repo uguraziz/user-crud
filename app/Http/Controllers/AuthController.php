@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AuthController extends Controller
     {
         $register = $request->validated();
 
-        $user = User::create($register);
+        $user = User::create($register)->assignRole(RoleEnum::EDITOR);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

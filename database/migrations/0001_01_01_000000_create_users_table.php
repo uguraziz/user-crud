@@ -29,6 +29,8 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('postal_code')->nullable();
             $table->rememberToken();
+
+            $table->softDeletes();
             $table->timestamps();
         });
 
