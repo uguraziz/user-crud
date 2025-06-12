@@ -17,14 +17,15 @@ class UserSeeder extends Seeder
 
         $this->command->info("Başladı: {$totalUsers} kullanıcı, {$chunks} parça halinde oluşturulacak.");
 
-        // Performans için foreign key kontrollerini geçici olarak kapat
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // PostgreSQL için foreign key kontrollerini geçici olarak kapat
+        DB::statement('SET session_replication_role = replica;');
 
         for ($i = 0; $i < $chunks; $i++) {
             User::factory($chunkSize)->create();
         }
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // Foreign key kontrollerini tekrar aç
+        DB::statement('SET session_replication_role = DEFAULT;');
         $this->command->info("🎉 Toplam {$totalUsers} kullanıcı başarıyla oluşturuldu!");
     }
 }
