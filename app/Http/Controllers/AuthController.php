@@ -54,7 +54,9 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             Log::warning('Failed login attempt', ['email' => $request->email]);
             return [
-                'message' => 'The provided credentials are incorrect.',
+                'errors' => [
+                    'email' => ['The provided credentials are incorrect.']
+                ]
             ];
         }
 

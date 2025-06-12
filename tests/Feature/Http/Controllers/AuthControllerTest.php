@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers;
+namespace Tests\Feature\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Models\User;
@@ -11,8 +11,6 @@ class AuthControllerTest extends TestCase
 {
     public function testRegister()
     {
-        Role::create(['name' => RoleEnum::EDITOR->value]);
-
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -160,8 +158,9 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson('/api/login', $loginData);
 
         $response->assertStatus(200);
-        $response->assertJson([
-            'message' => 'The provided credentials are incorrect.'
+        $response->assertJsonValidationErrors(['email']);
+        $response->assertJsonFragment([
+            'email' => ['The provided credentials are incorrect.']
         ]);
         $response->assertJsonMissing(['token', 'user', 'requires_2fa']);
     }

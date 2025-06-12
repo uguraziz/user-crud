@@ -2,10 +2,12 @@
 
 namespace Tests;
 
+use App\Enums\RoleEnum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Http;
+use Spatie\Permission\Models\Role;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -15,6 +17,9 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Role::create(['name' => RoleEnum::EDITOR->value]);
+
         Http::preventStrayRequests();
     }
 }
