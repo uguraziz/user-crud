@@ -6,7 +6,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://crud-front.altuntech.com'],
+      'allowed_origins' => [
+        env('FRONTEND_URL'),
+        'https://crud-front.altuntech.com',
+    ],
 
     'allowed_origins_patterns' => [],
 
