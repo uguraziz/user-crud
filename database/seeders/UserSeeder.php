@@ -13,9 +13,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // $totalUsers = 10000000; // 10 million
-        $totalUsers = 1000;
-        $chunkSize = 100;
+        $totalUsers = 10000000; // 10 million
+        $chunkSize = 1000;
         $chunks = $totalUsers / $chunkSize;
 
         $this->command->info("Starting to create {$totalUsers} users in {$chunks} chunks of {$chunkSize}...");
