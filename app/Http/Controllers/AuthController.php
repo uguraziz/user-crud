@@ -4,17 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
+    private const CACHE_DURATION = 60 * 60; // 1 Hours
+
     public function user(Request $request)
     {
-        return $request->user();
+        $userId = $request->user()->id;
+
+        $user = Cache::remember('user_profile_' . $userId, self::CACHE_DURATION, function () use ($userId) {
+            return new UserResource(User::find($userId));
+        });
+
+        return $user;
     }
+
     public function register(RegisterRequest $request)
     {
         $register = $request->validated();
@@ -44,7 +55,7 @@ class AuthController extends Controller
             ];
         }
 
-         $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
             'message' => 'Login successful',
@@ -55,7 +66,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $userId = $request->user()->id;
+
         $request->user()->tokens()->delete();
+
+        Cache::forget('user_profile_' . $userId);
 
         return [
             'message' => 'Logout successful',
