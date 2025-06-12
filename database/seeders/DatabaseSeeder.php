@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
             User::factory($chunkSize)->create();
         });
 
-        $this->command->info("Database seeding completed! Created {$totalUsers} users plus 1 test user.");
+        $this->command->info("Database seeding completed! Created {$totalUsers} users.");
     }
 }
