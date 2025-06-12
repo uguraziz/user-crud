@@ -20,8 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        env('FRONTEND_URL', 'https://www.crud-front.cozogrenkazan.com'),
-        'https://crud-front.cozogrenkazan.com'
+        env('FRONTEND_URL'),
+        'https://crud-front.altuntech.com',
     ],
 
     'allowed_origins_patterns' => [],
