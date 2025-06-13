@@ -20,9 +20,9 @@ class UserController extends Controller
         return QueryBuilder::for(User::class)
         ->select(['id', 'first_name', 'last_name', 'email', 'phone', 'country', 'gender'])
         ->allowedFilters([
-            'first_name',
-            'last_name',
-            'email',
+            AllowedFilter::beginsWithStrict('first_name'),
+            AllowedFilter::beginsWithStrict('last_name'),
+            AllowedFilter::beginsWithStrict('email'),
         ])
         ->defaultSort('-id')
         ->simplePaginate($perPage);
