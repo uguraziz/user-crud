@@ -28,7 +28,7 @@ class UserController extends Controller
             AllowedFilter::exact('gender'),
         ])
         ->defaultSort('-id')
-        ->simplePaginate($perPage);
+        ->cursorPaginate($perPage);
     }
 
     public function count()
