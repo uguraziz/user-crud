@@ -10,7 +10,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $totalUsers = 10_000_000;
-        $chunkSize = 1000;
+        $chunkSize = 500;
         $chunks = (int) ($totalUsers / $chunkSize);
 
         $this->command->info("Başladı: {$totalUsers} kullanıcı, {$chunks} parça halinde oluşturulacak.");
