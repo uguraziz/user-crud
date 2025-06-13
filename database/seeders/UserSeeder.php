@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -17,15 +15,16 @@ class UserSeeder extends Seeder
 
         $this->command->info("Başladı: {$totalUsers} kullanıcı, {$chunks} parça halinde oluşturulacak.");
 
-        // PostgreSQL için foreign key kontrollerini geçici olarak kapat
-        DB::statement('SET session_replication_role = replica;');
-
+        $globalCounter = 1;
         for ($i = 0; $i < $chunks; $i++) {
-            User::factory($chunkSize)->create();
+            $users = User::factory($chunkSize)->make()->each(function ($user) use (&$globalCounter) {
+                $user->email = "user{$globalCounter}@example.com";
+                $globalCounter++;
+            })->toArray();
+
+            User::insert($users);
         }
 
-        // Foreign key kontrollerini tekrar aç
-        DB::statement('SET session_replication_role = DEFAULT;');
         $this->command->info("🎉 Toplam {$totalUsers} kullanıcı başarıyla oluşturuldu!");
     }
 }
