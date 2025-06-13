@@ -18,7 +18,7 @@ class UserController extends Controller
         $perPage = $request->input('per_page', 10);
 
         return QueryBuilder::for(User::class)
-        ->select(['id', 'first_name', 'last_name', 'email', 'phone', 'country', 'gender', 'created_at'])
+        ->select(['id', 'first_name', 'last_name', 'email', 'phone', 'country', 'gender'])
         ->allowedFilters([
             'first_name',
             'last_name',
