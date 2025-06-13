@@ -23,6 +23,9 @@ class UserController extends Controller
             AllowedFilter::beginsWithStrict('first_name'),
             AllowedFilter::beginsWithStrict('last_name'),
             AllowedFilter::beginsWithStrict('email'),
+            AllowedFilter::beginsWithStrict('phone'),
+            AllowedFilter::beginsWithStrict('country'),
+            AllowedFilter::exact('gender'),
         ])
         ->defaultSort('-id')
         ->simplePaginate($perPage);
