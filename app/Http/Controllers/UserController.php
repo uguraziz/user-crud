@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\FuzzyFilter;
+use App\Enums\RoleEnum;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
@@ -45,7 +45,7 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $user = User::create($validatedData);
+        $user = User::create($validatedData)->assignRole(RoleEnum::EDITOR);
 
         return response()->json([
             'message' => 'User created successfully',
@@ -58,8 +58,17 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validated();
+        $roles = $request->input('roles');
 
         $user->update($validatedData);
+
+        if ($roles) {
+            $newRole = is_array($roles) ? $roles[0] : $roles;
+            $currentRole = $user->getRoleNames()->first();
+            if ($currentRole !== $newRole) {
+                $user->syncRoles([$newRole]);
+            }
+        }
 
         return response()->json([
             'message' => 'User updated successfully',
@@ -70,6 +79,13 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+         if (!auth()->user()->hasRole(RoleEnum::ADMIN->value)) {
+            return response()->json([
+                'message' => 'Unauthorized. Admin role required.'
+            ], 403);
+        }
+
+
         $user->delete();
 
         return response()->json([

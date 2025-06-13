@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\UserController;
 use Tests\TestCase;
 use App\Models\User;
@@ -246,6 +247,7 @@ class UserControllerTest extends TestCase
     public function testDestroy()
     {
         $admin = User::factory()->create();
+        $admin->assignRole(RoleEnum::ADMIN->value);
         $this->actingAs($admin, 'sanctum');
 
         $user = User::factory()->create();
