@@ -21,7 +21,7 @@ class UserController extends Controller
             ->allowedFilters([
                 AllowedFilter::custom('search', new FuzzyFilter()),
             ])
-            ->defaultSort('-created_at')
+            ->defaultSort('-id')
             ->paginate($perPage);
 
         return UserResource::collection($users);
