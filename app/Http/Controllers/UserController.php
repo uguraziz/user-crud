@@ -28,6 +28,11 @@ class UserController extends Controller
         ->simplePaginate($perPage);
     }
 
+    public function count()
+    {
+        return User::count();
+    }
+
     public function show(User $user)
     {
         return new UserResource($user);

@@ -15,4 +15,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("logout", [AuthController::class, 'logout']);
 
     Route::ApiResource('users', UserController::class);
+    Route::post('users/count', [UserController::class, 'count']);
 });

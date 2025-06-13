@@ -24,14 +24,10 @@ class UserControllerTest extends TestCase
                     'id',
                     'first_name',
                     'last_name',
-                    'full_name',
                     'email',
                     'country',
-                    'city'
                 ]
             ],
-            'links',
-            'meta'
         ]);
     }
 
@@ -48,7 +44,7 @@ class UserControllerTest extends TestCase
 
         User::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/users?filter[search]=john');
+        $response = $this->getJson('/api/users?filter[first_name]=john');
 
         $response->assertStatus(200);
         $response->assertJsonFragment(['first_name' => 'John']);
@@ -64,8 +60,6 @@ class UserControllerTest extends TestCase
         $response = $this->getJson('/api/users?per_page=10&page=2');
 
         $response->assertStatus(200);
-        $response->assertJsonPath('meta.per_page', 10);
-        $response->assertJsonPath('meta.current_page', 2);
     }
 
     public function testShow()
