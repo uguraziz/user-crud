@@ -17,9 +17,17 @@ class UserSeeder extends Seeder
 
         $globalCounter = 1;
         for ($i = 0; $i < $chunks; $i++) {
-            $users = User::factory($chunkSize)->make()->each(function ($user) use (&$globalCounter) {
-                $user->email = "user{$globalCounter}@example.com";
+            $users = User::factory($chunkSize)->make()->map(function ($user) use (&$globalCounter) {
+                $userData = [
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => "user{$globalCounter}@example.com",
+                    'password' => $user->password,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
                 $globalCounter++;
+                return $userData;
             })->toArray();
 
             User::insert($users);
