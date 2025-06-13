@@ -25,7 +25,7 @@ class UserController extends Controller
             'email',
         ])
         ->defaultSort('-id')
-        ->paginate($perPage);
+        ->simplePaginate($perPage);
     }
 
     public function show(User $user)
