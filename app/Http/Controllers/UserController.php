@@ -17,14 +17,15 @@ class UserController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $users = QueryBuilder::for(User::class)
-            ->allowedFilters([
-                AllowedFilter::custom('search', new FuzzyFilter()),
-            ])
-            ->defaultSort('-id')
-            ->paginate($perPage);
-
-        return UserResource::collection($users);
+        return QueryBuilder::for(User::class)
+        ->select(['id', 'first_name', 'last_name', 'email', 'phone', 'country', 'gender', 'created_at'])
+        ->allowedFilters([
+            'first_name',
+            'last_name',
+            'email',
+        ])
+        ->defaultSort('-id')
+        ->paginate($perPage);
     }
 
     public function show(User $user)
